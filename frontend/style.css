@@ -77,3 +77,6 @@ body { font-family: 'Inter', sans-serif; background-color: var(--netflix-black);
 .chat-input-area { padding: 18px; display: flex; gap: 12px; background: #111; border-top: 1px solid #333; }
 .chat-input-area input { flex: 1; padding: 12px; border-radius: 8px; border: 2.5px solid var(--epitech-blue); background: #fff; color: #000; font-weight: 700; outline: none; }
 .chat-input-area button { background: var(--epitech-blue); border: none; color: #fff; width: 50px; border-radius: 8px; cursor: pointer; }
+
+/* STYLE DU BOUTON RESET (REGENERATION) */
+#chatbotReset:hover { color: var(--epitech-yellow); transform: rotate(-90deg); transition: 0.3s; }

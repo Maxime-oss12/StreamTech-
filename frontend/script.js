@@ -1,5 +1,5 @@
 // C'EST CA LA CORRECTION : Ca doit pointer sur le port 8000
-const BACKEND_URL = 'http://127.0.0.1:8000/api/chat';
+const BACKEND_URL = 'http://127.0.0.1:8000/chat';
 const JSON_FILE = 'movies.json';
 let movieStore = [];
 
@@ -20,15 +20,16 @@ async function run() {
 }
 
 function setHero(m) {
+    const hero = document.getElementById('hero');
     document.getElementById('heroTitle').innerText = m.title;
     document.getElementById('heroDescription').innerText = m.description || m.plot;
-    document.getElementById('hero').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${m.poster})`;
+    hero.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${m.poster})`;
 }
 
 function renderGrid() {
     const grid = document.getElementById('moviesGrid');
     grid.innerHTML = '';
-    movieStore.slice(0, 20).forEach(m => {
+    movieStore.forEach(m => {
         const card = document.createElement('div');
         card.className = 'movie-card';
         card.innerHTML = `
@@ -43,10 +44,15 @@ function renderGrid() {
 function initChat() {
     const box = document.getElementById('chatbotWindow');
     const input = document.getElementById('userInput');
+    const messages = document.getElementById('chatMessages');
 
     document.getElementById('chatbotToggle').onclick = () => box.classList.toggle('active');
     document.getElementById('chatbotClose').onclick = () => box.classList.remove('active');
     document.getElementById('chatbotResize').onclick = () => box.classList.toggle('expanded');
+    document.getElementById('chatbotReset').onclick = () => {
+        messages.innerHTML = '';
+        displayMsg('Assistant StreamTech réinitialisé. Posez-moi vos questions !', 'bot');
+    };
 
     const sendAction = async () => {
         const text = input.value.trim();
@@ -65,7 +71,7 @@ function initChat() {
             const data = await res.json();
             botNode.innerText = data.response;
         } catch (e) {
-            botNode.innerText = "Erreur : le LLM local n'a pas pu repondre.";
+            botNode.innerText = "Erreur : L'IA n'est pas joignable.";
         }
     };
 
