@@ -1,6 +1,5 @@
 import requests
 from fastmcp import FastMCP
-import pandas as pd
 from datetime import datetime
 from bs4 import BeautifulSoup
 
@@ -38,17 +37,6 @@ GENRE_IDS = {
 @mcp.tool()
 def GetTime() -> str:
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-
-@mcp.tool()
-def multiply(a: float, b: float) -> float:
-    return a * b
-
-
-@mcp.tool()
-def read_csv_stats(path: str) -> str:
-    df = pd.read_csv(path)
-    return df.describe().to_string()
 
 
 @mcp.tool()

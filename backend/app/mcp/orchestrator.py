@@ -35,7 +35,6 @@ SYSTEM_PROMPT = (
     "- get_top_n_popular_series(top_n: int = 5)\n"
     "- get_upcoming_movies(top_n: int = 5)\n"
     "- get_top_movies_by_genre(genre_name: str, top_n: int = 5, language: str = \"fr-FR\")\n"
-    "- multiply(a: float, b: float)\n"
     "- search_movie(title: str)\n"
     "- get_movie_details(title: str)\n"
     "- get_movie_rating(title: str)\n"
@@ -47,7 +46,6 @@ SYSTEM_PROMPT = (
 
 ALLOWED_TOOLS = {
     "GetTime",
-    "multiply",
     "retrieve_password",
     "recommend_screen_time",
     "search_movie",
@@ -58,7 +56,6 @@ ALLOWED_TOOLS = {
     "get_top_n_popular_series",
     "get_upcoming_movies",
     "get_top_movies_by_genre",
-    "recommend_movies",
 }
 REQUIRED_ARGS = {
     "search_movie": {"title"},
@@ -66,8 +63,6 @@ REQUIRED_ARGS = {
     "get_movie_rating": {"title"},
     "compare_ratings": {"movie1_title", "movie1_rating", "movie2_title", "movie2_rating"},
     "get_top_movies_by_genre": {"genre_name"},
-    "recommend_movies": {"genre"},
-    "multiply": {"a", "b"},
 }
 
 
@@ -98,9 +93,6 @@ async def call_tool(tool_call: str):
 
 
 async def call_tool_with_kwargs(name: str, kwargs: dict):
-    if name.lower() == "multiply":
-        kwargs = {k: float(v) for k, v in kwargs.items()}
-
     result = await mcp_client.call_tool(name, kwargs)
 
     if hasattr(result, "data"):
@@ -111,9 +103,6 @@ async def call_tool_with_kwargs(name: str, kwargs: dict):
         value = result.content[0].text
     else:
         value = str(result)
-
-    if name.lower() == "multiply":
-        return f"{kwargs['a']} × {kwargs['b']} fait {value}"
 
     return value
 
@@ -170,7 +159,6 @@ def contains_tool_mention(text: str) -> bool:
     tool_markers = [
         "tool:",
         "gettime",
-        "multiply",
         "retrieve_password",
         "recommend_screen_time",
         "search_movie",
@@ -179,7 +167,8 @@ def contains_tool_mention(text: str) -> bool:
         "compare_ratings",
         "get_top_n_popular_movies",
         "get_top_movies_by_genre",
-        "recommend_movies",
+        "get_top_n_popular_series",
+        "get_upcoming_movies",
     ]
     return any(marker in lowered for marker in tool_markers)
 
@@ -401,8 +390,6 @@ def infer_tool_from_prompt(user_prompt: str) -> tuple[str, dict]:
                     top_n = int(token)
                     break
             return "get_top_movies_by_genre", {"genre_name": genre_name, "top_n": top_n}
-    if "recommande" in lowered or "recommandation" in lowered:
-        return "recommend_movies", {"genre": user_prompt.strip()}
     if "a venir" in lowered or "à venir" in lowered or "prochain" in lowered or "upcoming" in lowered:
         top_n = 5
         for token in lowered.split():
