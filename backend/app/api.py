@@ -1,9 +1,14 @@
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 
-from backend.app.api.schemas import ChatRequest
 from backend.app.clients.ollama_client import OllamaError
 from backend.app.mcp.orchestrator import run_chat
 from backend.app.tools import scrape_wikipedia
+
+
+class ChatRequest(BaseModel):
+    prompt: str
+
 
 router = APIRouter(prefix="/api")
 
