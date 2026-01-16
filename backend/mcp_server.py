@@ -8,6 +8,31 @@ mcp = FastMCP(name="custom-tools-mcp-server")
 
 API_KEY_TMDB = "65632612bcfadf9d21c403e16c4df96f"
 BASE_URL_TMDB = "https://api.themoviedb.org/3"
+GENRE_IDS = {
+    "action": 28,
+    "aventure": 12,
+    "animation": 16,
+    "comedie": 35,
+    "comédie": 35,
+    "crime": 80,
+    "documentaire": 99,
+    "drame": 18,
+    "fantastique": 14,
+    "science-fiction": 878,
+    "sf": 878,
+    "horreur": 27,
+    "thriller": 53,
+    "romance": 10749,
+    "guerre": 10752,
+    "musique": 10402,
+    "mystere": 9648,
+    "mystère": 9648,
+    "familial": 10751,
+    "historique": 36,
+    "western": 37,
+    "telefilm": 10770,
+    "téléfilm": 10770,
+}
 
 # ----------------- OUTILS TEST -----------------
 @mcp.tool()
@@ -189,6 +214,50 @@ def get_movie_rating(title: str) -> float:
     )
 
     return float(movie.get("vote_average", 0.0))
+
+
+@mcp.tool()
+def get_top_movies_by_genre(genre_name: str, top_n: int = 5, language: str = "fr-FR") -> str:
+    """
+    Renvoie les top N films par genre via TMDB.
+    genre_name : nom du genre (ex: action, drame, comedie)
+    """
+    genre_key = genre_name.strip().lower()
+    genre_id = GENRE_IDS.get(genre_key)
+    if genre_id is None:
+        return (
+            "Genre non reconnu. Exemples: action, drame, comedie, science-fiction, "
+            "thriller, romance, horreur."
+        )
+
+    url = f"{BASE_URL_TMDB}/discover/movie"
+    params = {
+        "api_key": API_KEY_TMDB,
+        "with_genres": genre_id,
+        "language": language,
+        "sort_by": "vote_average.desc",
+        "vote_count.gte": 200,
+        "include_adult": False,
+    }
+
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    results = response.json().get("results", [])
+
+    if not results:
+        return "Aucun film trouvé pour ce genre."
+
+    top_n = min(top_n, len(results))
+    result_str = f"🎬 Top {top_n} films ({genre_name}) :\n\n"
+    for movie in results[:top_n]:
+        result_str += (
+            f"Titre: {movie.get('title', 'N/A')}\n"
+            f"Date de sortie: {movie.get('release_date', 'N/A')}\n"
+            f"Note: {movie.get('vote_average', 'N/A')}\n"
+            "----------------------------------------\n"
+        )
+
+    return result_str
 
 
 @mcp.tool()

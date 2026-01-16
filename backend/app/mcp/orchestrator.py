@@ -25,7 +25,7 @@ SYSTEM_PROMPT = (
     "- Si la question concerne les films populaires, tu DOIS utiliser l'outil get_top_n_popular_movies().\n"
     "- Si la question concerne les series populaires, tu DOIS utiliser l'outil get_top_n_popular_series().\n"
     "- Si la question concerne les films a venir ou les sorties a venir, tu DOIS utiliser l'outil get_upcoming_movies().\n"
-    "- Si la question concerne les séries populaires, tu DOIS utiliser l'outil get_top_n_popular_series().\n"
+    "- Si la question concerne un top par genre, tu DOIS utiliser l'outil get_top_movies_by_genre().\n"
     "- Si la question concerne le temps d'écran, le moment de regarder un film, ou s'il est approprié de regarder quelque chose maintenant,tu DOIS utiliser l'outil recommend_screen_time().\n\n"
 
     "Outils disponibles :\n"
@@ -34,7 +34,7 @@ SYSTEM_PROMPT = (
     "- get_top_n_popular_movies(top_n: int = 5)\n"
     "- get_top_n_popular_series(top_n: int = 5)\n"
     "- get_upcoming_movies(top_n: int = 5)\n"
-    "- get_top_n_popular_series(top_n: int = 5)\n"
+    "- get_top_movies_by_genre(genre_name: str, top_n: int = 5, language: str = \"fr-FR\")\n"
     "- multiply(a: float, b: float)\n"
     "- search_movie(title: str)\n"
     "- get_movie_details(title: str)\n"
@@ -57,6 +57,7 @@ ALLOWED_TOOLS = {
     "get_top_n_popular_movies",
     "get_top_n_popular_series",
     "get_upcoming_movies",
+    "get_top_movies_by_genre",
     "recommend_movies",
 }
 REQUIRED_ARGS = {
@@ -64,6 +65,7 @@ REQUIRED_ARGS = {
     "get_movie_details": {"title"},
     "get_movie_rating": {"title"},
     "compare_ratings": {"movie1_title", "movie1_rating", "movie2_title", "movie2_rating"},
+    "get_top_movies_by_genre": {"genre_name"},
     "recommend_movies": {"genre"},
     "multiply": {"a", "b"},
 }
@@ -176,6 +178,7 @@ def contains_tool_mention(text: str) -> bool:
         "get_movie_rating",
         "compare_ratings",
         "get_top_n_popular_movies",
+        "get_top_movies_by_genre",
         "recommend_movies",
     ]
     return any(marker in lowered for marker in tool_markers)
