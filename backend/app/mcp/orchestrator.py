@@ -321,6 +321,59 @@ def is_upcoming_prompt(user_prompt: str) -> bool:
     ]
     return any(key in lowered for key in keywords)
 
+
+def _strip_accents(text: str) -> str:
+    import unicodedata
+
+    return "".join(
+        char for char in unicodedata.normalize("NFD", text) if not unicodedata.combining(char)
+    )
+
+
+GENRE_ALIASES = {
+    "action": "action",
+    "aventure": "aventure",
+    "animation": "animation",
+    "comedie": "comedie",
+    "comédie": "comedie",
+    "crime": "crime",
+    "documentaire": "documentaire",
+    "drame": "drame",
+    "fantastique": "fantastique",
+    "science-fiction": "science-fiction",
+    "science fiction": "science-fiction",
+    "sf": "sf",
+    "horreur": "horreur",
+    "thriller": "thriller",
+    "romance": "romance",
+    "guerre": "guerre",
+    "musique": "musique",
+    "mystere": "mystere",
+    "mystère": "mystere",
+    "familial": "familial",
+    "historique": "historique",
+    "western": "western",
+    "telefilm": "telefilm",
+    "téléfilm": "telefilm",
+}
+
+
+def extract_genre_from_prompt(user_prompt: str) -> str | None:
+    lowered = user_prompt.lower().replace("’", "'").replace("œ", "oe")
+    lowered = " ".join(lowered.split())
+    stripped = _strip_accents(lowered)
+    for alias, canonical in GENRE_ALIASES.items():
+        alias_stripped = _strip_accents(alias)
+        if alias_stripped in stripped:
+            return canonical
+    return None
+
+
+def is_genre_top_prompt(user_prompt: str) -> bool:
+    lowered = user_prompt.lower()
+    keywords = ["top", "meilleur", "meilleurs", "classement"]
+    return any(key in lowered for key in keywords) and extract_genre_from_prompt(user_prompt)
+
 def needs_wikipedia(user_prompt: str) -> bool:
     lowered = user_prompt.lower()
     keywords = [
@@ -339,6 +392,15 @@ def needs_wikipedia(user_prompt: str) -> bool:
 
 def infer_tool_from_prompt(user_prompt: str) -> tuple[str, dict]:
     lowered = user_prompt.lower()
+    if "top" in lowered or "meilleur" in lowered or "meilleurs" in lowered:
+        genre_name = extract_genre_from_prompt(user_prompt)
+        if genre_name:
+            top_n = 5
+            for token in lowered.split():
+                if token.isdigit():
+                    top_n = int(token)
+                    break
+            return "get_top_movies_by_genre", {"genre_name": genre_name, "top_n": top_n}
     if "recommande" in lowered or "recommandation" in lowered:
         return "recommend_movies", {"genre": user_prompt.strip()}
     if "a venir" in lowered or "à venir" in lowered or "prochain" in lowered or "upcoming" in lowered:
@@ -410,6 +472,23 @@ async def run_chat(prompt: str) -> str:
             )
         except Exception:
             return "Je n'ai pas pu recuperer la procedure pour le moment."
+    if is_genre_top_prompt(prompt):
+        try:
+            genre_name = extract_genre_from_prompt(prompt)
+            top_n = 5
+            for token in prompt.split():
+                if token.isdigit():
+                    top_n = int(token)
+                    break
+            raw_result = await call_tool_with_kwargs(
+                "get_top_movies_by_genre", {"genre_name": genre_name, "top_n": top_n}
+            )
+            return raw_result
+        except Exception:
+            return (
+                "Je n'ai pas pu appeler l'outil demandé. "
+                "Vérifiez votre requête ou réessayez."
+            )
     if is_upcoming_prompt(prompt):
         try:
             top_n = 5
