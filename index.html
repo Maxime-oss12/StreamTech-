@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamTech - Excellence Digitale</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-left">
+                <div class="navbar-logo">StreamTech</div>
+                <ul class="navbar-menu">
+                    <li><a href="#hero" class="active">Accueil</a></li>
+                    <li><a href="#">Series</a></li>
+                    <li><a href="#">Films</a></li>
+                    <li><a href="#">Nouveautes</a></li>
+                    <li><a href="#">Ma liste</a></li>
+                </ul>
+            </div>
+            <div class="navbar-right">
+                <button class="nav-icon"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="nav-icon"><i class="fa-solid fa-bell"></i></button>
+                <div class="user-profile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="Profil" class="avatar-img">
+                    <i class="fa-solid fa-caret-down"></i>
+                    <div class="dropdown">
+                        <a href="#">Compte</a>
+                        <a href="#">Aide</a>
+                        <hr>
+                        <a href="#" class="logout">Deconnexion</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title" id="heroTitle">Chargement...</h1>
+            <p class="hero-description" id="heroDescription">Le meilleur de l'innovation cinematographique.</p>
+            <div class="hero-btns">
+                <button class="btn btn-white"><i class="fa-solid fa-play"></i> Lecture</button>
+                <button class="btn btn-gray"><i class="fa-solid fa-circle-info"></i> En savoir plus</button>
+            </div>
+        </div>
+    </section>
+
+    <main class="content-wrapper">
+        <h2 class="section-heading">Tendances Actuelles</h2>
+        <div class="movies-grid" id="moviesGrid"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="social-links">
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+            <div class="footer-links-grid">
+                <div class="footer-col">
+                    <a href="#">Audiodescription</a>
+                    <a href="#">Relations Investisseurs</a>
+                    <a href="#">Confidentialite</a>
+                </div>
+                <div class="footer-col">
+                    <a href="#">Centre d'aide</a>
+                    <a href="#">Recrutement</a>
+                    <a href="#">Informations legales</a>
+                </div>
+                <div class="footer-col">
+                    <a href="#">Cartes cadeaux</a>
+                    <a href="#">Boutique StreamTech</a>
+                    <a href="#">Preferences de cookies</a>
+                </div>
+                <div class="footer-col">
+                    <a href="#">Presse</a>
+                    <a href="#">Conditions d'utilisation</a>
+                    <a href="#">Mentions legales</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <button class="service-code-btn">Code de service</button>
+                <p class="copyright">© 1997-2026 StreamTech, Inc. | Projet MSc MSI Epitech</p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="chat-widget" id="chatbotWidget">
+        <button class="chat-trigger" id="chatbotToggle"><i class="fa-solid fa-robot"></i></button>
+        <div class="chat-window" id="chatbotWindow">
+            <div class="chat-header">
+                <span class="chat-title">Assistant StreamTech</span>
+                <div class="chat-actions">
+                    <button id="chatbotResize"><i class="fa-solid fa-expand"></i></button>
+                    <button id="chatbotClose"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="userInput" placeholder="Posez une question a StreamTech...">
+                <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
