@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
 
-from app.api.schemas import ChatRequest
-from app.clients.ollama_client import OllamaError
-from app.mcp.orchestrator import run_chat
-from app.tools import scrape_wikipedia
+from backend.app.api.schemas import ChatRequest
+from backend.app.clients.ollama_client import OllamaError
+from backend.app.mcp.orchestrator import run_chat
+from backend.app.tools import scrape_wikipedia
 
 router = APIRouter(prefix="/api")
 

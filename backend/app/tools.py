@@ -11,7 +11,7 @@ from fastmcp import Client
 
 MCP_URL = os.getenv("MCP_URL", "http://127.0.0.1:3333/mcp")
 
-CACHE_DIR = Path("data/cache/wiki")
+CACHE_DIR = Path(__file__).resolve().parents[1] / "data" / "cache" / "wiki"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 WIKI_BASE = "https://fr.wikipedia.org"

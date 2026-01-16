@@ -1,10 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import router as api_router
-from app.api.schemas import ChatRequest
-from app.clients.ollama_client import OllamaError
-from app.mcp.orchestrator import run_chat
+from backend.app.api.routes import router as api_router
+from backend.app.api.schemas import ChatRequest
+from backend.app.clients.ollama_client import OllamaError
+from backend.app.mcp.orchestrator import run_chat
 
 app = FastAPI()
 

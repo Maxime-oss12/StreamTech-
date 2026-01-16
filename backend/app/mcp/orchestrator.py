@@ -1,5 +1,5 @@
-from app.clients.ollama_client import chat as ollama_chat
-from app.tools import MCPToolClient, scrape_wikipedia
+from backend.app.clients.ollama_client import chat as ollama_chat
+from backend.app.tools import MCPToolClient, scrape_wikipedia
 
 mcp_client = MCPToolClient()
 

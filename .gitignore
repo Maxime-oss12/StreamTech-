@@ -8,4 +8,4 @@ venv/
 .DS_Store
 
 # Local caches
-/data/cache/wiki/
+/backend/data/cache/wiki/
